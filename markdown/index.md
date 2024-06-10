@@ -3,13 +3,6 @@ title: 'WiFi Controlled RC Car'
 author: '**Alexander Kogan and Jonathan Vazquez** (website template by Ryan Tsang)'
 date: '*EEC172 WQ24*'
 
-subtitle: '<blockquote><b>EEC172 Final Project Webpage Example</b><br/>
-Note to current students: this is an <i>example</i> webpage and
-may not fulfill all stated requirements of the current quarter''s 
-assignment.<br/>The website source is hosted 
-<a href="https://github.com/ucd-eec172/project-website-example">on github</a>.
-</blockquote>'
-
 toc-title: 'Table of Contents'
 abstract-title: '<h2>Description</h2>'
 abstract: 'Our project is a remote controlled RC car that communicates over TCP via a WiFi hotspot. Instead of a typical remote that uses levers or buttons to control the direction of the car, the remote instead is the accelerometer on a Ti CC3200 board. In other words, in order to move the car, you would have to tilt the Ti CC3200 board in the direction you want it to move. The actual car is a kit from DIYables that comes with 2 DC motors, a chassis with wheels, and a battery pack to power the motors. In addition, a L298N driver module needs to be acquired in order to control the motors. Typically the car and the remote would communicate via IR or bluetooth but we have instead opted to communicate over TCP because the CC3200 board does not support bluetooth or IR communication. Because of this, there is one CC3200 board that is physically controlling the car and another CC3200 board that is acting as the controller in order to be able to control the RC car without wires needing to be attached. The L298N driver is also able to power the CC3200 board that it is attached to because the battery pack has a total capacity of 6V. The motors and the CC3200 board that controls them are both being powered by the same source which lowers how many power sources we need on the car chassis. In order for the CC3200 boards to communicate over TCP, they needed to know the IP address of the other. The C3200 that controls the car posts its IP address to AWS IoT so that the controller CC3200 can retrieve it and establish a connection. The controller board also has an OLED screen that displays the accelerometer data of the board on the RC car. Information being displayed means that both boards are successfully sharing information with each other. If switch 3 on the controller board is pressed then it stops sending data to the RC board, acting as if the car has stopped.
