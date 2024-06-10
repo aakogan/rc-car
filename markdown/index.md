@@ -1,6 +1,6 @@
 ---
-title: 'NutriSense: Automated Hydroponics Dosing System'
-author: '**Kushagra Tiwari and Shengmin Liu** (website template by Ryan Tsang)'
+title: 'WiFi Controlled RC Car'
+author: '**Alexander Kogan and Jonathan Vazquez** (website template by Ryan Tsang)'
 date: '*EEC172 WQ24*'
 
 subtitle: '<blockquote><b>EEC172 Final Project Webpage Example</b><br/>
@@ -12,27 +12,12 @@ assignment.<br/>The website source is hosted
 
 toc-title: 'Table of Contents'
 abstract-title: '<h2>Description</h2>'
-abstract: 'Hydroponics is a technique where plants are grown in a nutrient-rich
-solution. This soil- free technique has been gaining traction recently
-due to its ability to optimize resource utilization. However, since
-plants are highly sensitive to changes in TDS, hydroponic setups require
-continuous TDS monitoring and adjustment. NutriSense, our device, allows
-hobbyists to achieve ideal hydroponics results on a small scale. It
-continuously monitors TDS and temperature, allowing the user to remotely
-read the status over AWS IoT cloud. The user can remotely enter upper
-and lower thresholds for TDS, and the device will automatically add
-nutrient solution or water to keep the TDS bounded by the thresholds.
-The device can also be configured to send notifications over SNS when
-the TDS value goes outside thresholds.
+abstract: 'Our project is a remote controlled RC car that communicates over TCP via a WiFi hotspot. Instead of a typical remote that uses levers or buttons to control the direction of the car, the remote instead is the accelerometer on a Ti CC3200 board. In other words, in order to move the car, you would have to tilt the Ti CC3200 board in the direction you want it to move. The actual car is a kit from DIYables that comes with 2 DC motors, a chassis with wheels, and a battery pack to power the motors. In addition, a L298N driver module needs to be acquired in order to control the motors. Typically the car and the remote would communicate via IR or bluetooth but we have instead opted to communicate over TCP because the CC3200 board does not support bluetooth or IR communication. Because of this, there is one CC3200 board that is physically controlling the car and another CC3200 board that is acting as the controller in order to be able to control the RC car without wires needing to be attached. The L298N driver is also able to power the CC3200 board that it is attached to because the battery pack has a total capacity of 6V. The motors and the CC3200 board that controls them are both being powered by the same source which lowers how many power sources we need on the car chassis. In order for the CC3200 boards to communicate over TCP, they needed to know the IP address of the other. The C3200 that controls the car posts its IP address to AWS IoT so that the controller CC3200 can retrieve it and establish a connection. The controller board also has an OLED screen that displays the accelerometer data of the board on the RC car. Information being displayed means that both boards are successfully sharing information with each other. If switch 3 on the controller board is pressed then it stops sending data to the RC board, acting as if the car has stopped.
 <br/><br/>
-Our source code can be found 
-<!-- replace this link -->
-<a href="https://github.com/ucd-eec172/project-website-example">
-  here (placeholder)</a>.
 
 <div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;padding-top:20px">
   <div style="display: inline-block; vertical-align: bottom;">
-    <img src="./media/image.jpg" style="width:auto;height:2in"/>
+    <img src="./media/image.jpg" style="width:auto;height:4in"/>
     <!-- <span class="caption"> </span> -->
   </div>
 </div>
@@ -48,10 +33,6 @@ Our source code can be found
 
 <!-- EDIT METADATA ABOVE FOR CONTENTS TO APPEAR ABOVE THE TABLE OF CONTENTS -->
 <!-- ALL CONTENT THAT FOLLWOWS WILL APPEAR IN AND AFTER THE TABLE OF CONTENTS -->
-
-# Description
-
-Our project is a remote controlled RC car that communicates over TCP via a WiFi hotspot. Instead of a typical remote that uses levers or buttons to control the direction of the car, the remote instead is the accelerometer on a Ti CC3200 board. In other words, in order to move the car, you would have to tilt the Ti CC3200 board in the direction you want it to move. The actual car is a kit from DIYables that comes with 2 DC motors, a chassis with wheels, and a battery pack to power the motors. In addition, a L298N driver module needs to be acquired in order to control the motors. Typically the car and the remote would communicate via IR or bluetooth but we have instead opted to communicate over TCP because the CC3200 board does not support bluetooth or IR communication. Because of this, there is one CC3200 board that is physically controlling the car and another CC3200 board that is acting as the controller in order to be able to control the RC car without wires needing to be attached. The L298N driver is also able to power the CC3200 board that it is attached to because the battery pack has a total capacity of 6V. The motors and the CC3200 board that controls them are both being powered by the same source which lowers how many power sources we need on the car chassis. In order for the CC3200 boards to communicate over TCP, they needed to know the IP address of the other. The C3200 that controls the car posts its IP address to AWS IoT so that the controller CC3200 can retrieve it and establish a connection. The controller board also has an OLED screen that displays the accelerometer data of the board on the RC car. Information being displayed means that both boards are successfully sharing information with each other. If switch 3 on the controller board is pressed then it stops sending data to the RC board, acting as if the car has stopped.
 
 # Design
 
@@ -142,175 +123,54 @@ The main future component that needs to be implemented is a way to have the two 
     <td><p>Provided by EEC172 Course</p></td>
     <td><p>$66.00</p></td>
     <td><p>$132.00</p></td>
-    <td><p>Control Remote and Local Devices</p></td>
+    <td><p>RC Car and Controller</p></td>
   </tr>
   <tr>
     <td><p>2</p></td>
     <td><p>Adafruit 1431 OLED</p></td>
     <td><p>128x128 RGB OLED Display. SPI protocol</p></td>
-    <td><p>2</p></td>
+    <td><p>1</p></td>
     <td><p>Provided by EEC172 Course</p></td>
     <td><p>$39.95</p></td>
-    <td><p>$79.90</p></td>
-    <td><p>Display PPM, Temperature, Thresholds, Inputs</p></td>
+    <td><p>$39.95</p></td>
+    <td><p>Display accelerometer readings from car</p></td>
   </tr>
   <tr>
     <td><p>3</p></td>
-    <td><p>Adafruit 4547 3VDC Pump</p></td>
-    <td><p>Submersible pump. 3V 100mA DC</p></td>
-    <td><p>2</p></td>
-    <td><p>Adafruit</p></td>
-    <td><p>$2.95</p></td>
-    <td><p>$5.90</p></td>
-    <td><p>For dispensing water and nutrient solution</p></td>
+    <td><p>DIYables RC 2WD Car Chassis Kit</p></td>
+    <td><p>RC Car works with Arduino, ESP32, ESP8266, Raspberry Pi, or any 5V or 3.3V microcontroller</p></td>
+    <td><p>1</p></td>
+    <td><p>Purchased from Amazon</p></td>
+    <td><p>$13.99</p></td>
+    <td><p>$13.99</p></td>
+    <td><p>The physical chasis, motors, wheels, and batteries for the RC car</p></td>
   </tr>
   <tr>
     <td><p>4</p></td>
-    <td><p>Adafruit 4545 6mm Tube</p></td>
-    <td><p>6mm Silicone Tube: 1 meter length</p></td>
+    <td><p>L298N Motor Driver Controller</p></td>
+    <td><p>ShillehTek L298N Motor Driver Controller Board Module for Stepper Motor & DC Dual H-Bridge</p></td>
     <td><p>1</p></td>
-    <td><p>Adafruit</p></td>
-    <td><p>$1.50</p></td>
-    <td><p>$1.50</p></td>
-    <td><p>For dispensing water and nutrient solution</p></td>
-  </tr>
-  <tr>
-    <td><p>5</p></td>
-    <td><p>NTC Thermistor 10k</p></td>
-    <td><p>10k ohm nominal resistance, 100cm lead</p></td>
-    <td><p>1</p></td>
-    <td><p>(Already had one, available on Aliexpress)</p></td>
-    <td><p>$0.92</p></td>
-    <td><p>$0.92</p></td>
-    <td><p>For temperature compensation</p></td>
-  </tr>
-  <tr>
-    <td><p>6</p></td>
-    <td><p>Adafruit AD1015 12-bit ADC</p></td>
-    <td><p>12-bit resolution, 4 channels, I2C</p></td>
-    <td><p>1</p></td>
-    <td><p>Adafruit</p></td>
-    <td><p>$9.95</p></td>
-    <td><p>$9.95</p></td>
-    <td><p>To convert Thermistor and TDS sensor reading to digital</p></td>
-  </tr>
-  <tr>
-    <td><p>7</p></td>
-    <td><p>PN2222A Transistor</p></td>
-    <td><p>NPN BJT (40V, 1000mA)</p></td>
-    <td><p>2</p></td>
-    <td><p>Digikey (onSemi)</p></td>
-    <td><p>$0.40</p></td>
-    <td><p>$0.80</p></td>
-    <td><p>For digital motor control</p></td>
-  </tr>
-  <tr>
-    <td><p>8</p></td>
-    <td><p>1N4001 Rectifier Diode</p></td>
-    <td><p>Diffused junction: 50V 1000mA</p></td>
-    <td><p>2</p></td>
-    <td><p>Digikey (Good-Ark Semi)</p></td>
-    <td><p>$0.16</p></td>
-    <td><p>$0.32</p></td>
-    <td><p>Reverse Current Protection</p></td>
-  </tr>
-  <tr>
-    <td><p>9</p></td>
-    <td><p>10k ohm resistor</p></td>
-    <td><p>10k ohm , 1% tolerance, 0.25W</p></td>
-    <td><p>1</p></td>
-    <td><p>Digikey (Stackpole Electronics)</p></td>
-    <td><p>$0.10</p></td>
-    <td><p>$0.10</p></td>
-    <td><p>Voltage divider for Thermistor</p></td>
-  </tr>
-  <tr>
-    <td><p>10</p></td>
-    <td><p>Vishay TSOP31130 IR RCVR</p></td>
-    <td><p>30kHz carrier frequency</p></td>
-    <td><p>2</p></td>
-    <td><p>Provided by EEC172 Course</p></td>
-    <td><p>$1.41</p></td>
-    <td><p>$2.82</p></td>
-    <td><p>Decode user inputs</p></td>
-  </tr>
-  <tr>
-    <td><p>11</p></td>
-    <td><p>330 ohm resistor</p></td>
-    <td><p>330 ohm resistor, &lt;5% tolerance, 3W</p></td>
-    <td><p>2</p></td>
-    <td><p>Provided by EEC172 Course</p></td>
-    <td><p>$0.59</p></td>
-    <td><p>$1.18</p></td>
-    <td><p>Current Limit for IR Receiv er</p></td>
-  </tr>
-  <tr>
-    <td><p>12</p></td>
-    <td><p>ATT-RC1534801 Remote</p></td>
-    <td><p>General-purpose TV remote. IR NTC protocol</p></td>
-    <td><p>1</p></td>
-    <td><p>Provided by EEC172 Course</p></td>
-    <td><p>$9.99</p></td>
-    <td><p>$9.99</p></td>
-    <td><p>Allow user inputs</p></td>
-  </tr>
-  <tr>
-    <td><p>13</p></td>
-    <td><p>CQRSENTDS01 TDS Sensor</p></td>
-    <td><p>Analog reading 0-2.3V. 0-1000ppm range</p></td>
-    <td><p>1</p></td>
-    <td><p>CQRobot</p></td>
-    <td><p>$7.99</p></td>
-    <td><p>$7.99</p></td>
-    <td><p>Measure TDS of plant solution</p></td>
-  </tr>
-  <tr>
-    <td><p>14</p></td>
-    <td><p>10uF Capacitor</p></td>
-    <td><p>Electrolytic Cap 100V</p></td>
-    <td><p>2</p></td>
-    <td><p>Provided by EEC172 Course</p></td>
-    <td><p>$0.18</p></td>
-    <td><p>$0.36</p></td>
-    <td><p>DC Filtering for IR Receiv er</p></td>
-  </tr>
-  <tr>
-    <td><p>15</p></td>
-    <td><p><u>AA Battery (4ct</u>)</p></td>
-    <td><p>1.5 Volt, Non-rechargable</p></td>
-    <td><p>1</p></td>
-    <td><p>Already had, but</p>
-      <p>available on Amazon</p></td>
-    <td><p>$3.65</p></td>
-    <td><p>$3.65</p></td>
-    <td><p>Provide Power to Motors</p></td>
-  </tr>
-  <tr>
-    <td><p>16</p></td>
-    <td><p>Battery Holder</p></td>
-    <td><p>2xAA (3 Volts Total)</p></td>
-    <td><p>2</p></td>
-    <td><p>Amazon</p></td>
-    <td><p>$2.50</p></td>
-    <td><p>$4.99</p></td>
-    <td><p>Provide Power to Motors</p></td>
+    <td><p>Purchased from Amazon</p></td>
+    <td><p>$6.89</p></td>
+    <td><p>$6.89</p></td>
+    <td><p>Sends power to the left and right motors and the RC car's CC3200</p></td>
   </tr>
   <tr>
     <td colspan="3">
       <p>TOTAL PARTS</p></td>
-    <td><p>25</p></td>
+    <td><p>5</p></td>
     <td colspan="2">
       <p>TOTAL</p></td>
-    <td><p>$262.37</p></td>
+    <td><p>$192.38</p></td>
     <td></td>
   </tr>
   <tr>
     <td colspan="3">
       <p>TOTAL PARTS (Excluding Provided)</p></td>
-    <td><p>14</p></td>
+    <td><p>2</p></td>
     <td colspan="2">
       <p>TOTAL (Exluding Provided)</p></td>
-    <td><p>$36.12</p></td>
+    <td><p>$20.88</p></td>
     <td></td>
   </tr>
 </tbody>
