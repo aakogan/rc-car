@@ -18,7 +18,7 @@ abstract: 'Our project is a remote controlled RC car that communicates over TCP 
 <h2>Video Demo</h2>
 <div style="text-align:center;margin:auto;max-width:560px">
   <div style="padding-bottom:56.25%;position:relative;height:0;">
-    <iframe style="left:0;top:0;width:100%;height:100%;position:absolute;" width="560" height="315" src="https://www.youtube.com/embed/wSRtnAEZhmc?si=3vQXNj4h0WkW-F-q" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe style="left:0;top:0;width:100%;height:100%;position:absolute;" width="560" height="315" src="https://youtube.com/shorts/G-6ubvGzQI0?feature=share" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </div>
 </div>
 '
@@ -38,7 +38,7 @@ abstract: 'Our project is a remote controlled RC car that communicates over TCP 
   <div style="display:inline-block;vertical-align:top;flex:0 0 400px;">
     <div class="fig">
       <img src="./media/block.png" style="width:90%;height:auto;" />
-      <span class="caption">System Flowchart</span>
+      <span class="caption">Block Diagram</span>
     </div>
   </div>
 </div>
