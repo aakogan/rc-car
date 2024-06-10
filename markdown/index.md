@@ -32,11 +32,7 @@ Our source code can be found
 
 <div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;padding-top:20px">
   <div style="display: inline-block; vertical-align: bottom;">
-    <img src="./media/Image_001.jpg" style="width:auto;height:2in"/>
-    <!-- <span class="caption"> </span> -->
-  </div>
-  <div style="display: inline-block; vertical-align: bottom;">
-    <img src="./media/Image_002.jpg" style="width:auto;height:2in" />
+    <img src="./media/image.jpg" style="width:auto;height:2in"/>
     <!-- <span class="caption"> </span> -->
   </div>
 </div>
@@ -53,99 +49,35 @@ Our source code can be found
 <!-- EDIT METADATA ABOVE FOR CONTENTS TO APPEAR ABOVE THE TABLE OF CONTENTS -->
 <!-- ALL CONTENT THAT FOLLWOWS WILL APPEAR IN AND AFTER THE TABLE OF CONTENTS -->
 
-# Market Survey
+# Description
 
-There are two types of similar product on the market. The first one is
-products from AeroGarden. Their products allow users to grow plants in
-nutrient solutions in a limited amount of usually 5 to 10. Compared with
-this product, our product provides an automated system for nutrient
-control that ensures the plant always has the correct amount of
-nutrients needed to avoid excess or insufficient nutrients. The other
-product is an expensive commercial system for horticulture aiming for a
-large scale of growth. Compared with this one, our product has the
-advantage of being cheap and small-scale which is more suitable for
-individual hobbyists to explore hydroponics.
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;">
-  <div style='display: inline-block; vertical-align: top;'>
-    <img src="./media/Image_003.jpg" style="width:auto;height:200"/>
-    <span class="caption">
-      <a href="https://aerogarden.com/gardens/harvest-family/Harvest-2.0.html">AeroGarden Harvest 2.0</a>
-      <ul style="text-align:left;">
-      <li>Inexpensive ($90)</li>
-      <li>Not Automated</li>
-      <li>Small Scale</li>
-      <li>No remote monitoring</li>
-    </ul>
-    </span>
-  </div>
-  <div style='display: inline-block; vertical-align: top;'>
-    <img src="./media/Image_004.jpg" style="width:auto;height:200" />
-    <span class="caption">
-      <a href="https://www.hydroexperts.com.au/Autogrow-MultiGrow-Controller-All-In-One-Controller-8-Growing-Zones">Autogrow Multigrow</a>
-      <ul style="text-align:left;">
-      <li>Expensive ($4500)</li>
-      <li>Fully Automated</li>
-      <li>Huge Scale</li>
-      <li>Cloud monitoring</li>
-    </ul>
-    </span>
-  </div>
-</div>
+Our project is a remote controlled RC car that communicates over TCP via a WiFi hotspot. Instead of a typical remote that uses levers or buttons to control the direction of the car, the remote instead is the accelerometer on a Ti CC3200 board. In other words, in order to move the car, you would have to tilt the Ti CC3200 board in the direction you want it to move. The actual car is a kit from DIYables that comes with 2 DC motors, a chassis with wheels, and a battery pack to power the motors. In addition, a L298N driver module needs to be acquired in order to control the motors. Typically the car and the remote would communicate via IR or bluetooth but we have instead opted to communicate over TCP because the CC3200 board does not support bluetooth or IR communication. Because of this, there is one CC3200 board that is physically controlling the car and another CC3200 board that is acting as the controller in order to be able to control the RC car without wires needing to be attached. The L298N driver is also able to power the CC3200 board that it is attached to because the battery pack has a total capacity of 6V. The motors and the CC3200 board that controls them are both being powered by the same source which lowers how many power sources we need on the car chassis. In order for the CC3200 boards to communicate over TCP, they needed to know the IP address of the other. The C3200 that controls the car posts its IP address to AWS IoT so that the controller CC3200 can retrieve it and establish a connection. The controller board also has an OLED screen that displays the accelerometer data of the board on the RC car. Information being displayed means that both boards are successfully sharing information with each other. If switch 3 on the controller board is pressed then it stops sending data to the RC board, acting as if the car has stopped.
 
 # Design
 
-## System Architecture
+## Functional Specification
 
 <div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;">
   <div style="display:inline-block;vertical-align:top;flex:1 0 400px;">
-    As shown in the system flowchart, we use one of the CC3200 boards for
-    the closed feedback loop for maintaining concentration in the
-    environment. The board will read values with I2C protocol through an ADC
-    which reads values from the thermistor and the TDS meter sensor. The
-    board will also periodically read user-defined thresholds from the AWS
-    cloud using RESTful APIs. When the sensory values read outside of the
-    user-defined thresholds, the board will activate the motor control
-    function to pump either water or nutrient solution to bring the
-    concentration back within the thresholds. Meanwhile, another CC3200
-    board is frequently reading from the AWS cloud to present the current
-    TDS reading and user-defined threshold to the user on an OLED through
-    SPI protocols. To adjust the thresholds, the user can either do it
-    remotely or locally by using a TV remote to type the number into the IR
-    receiver. The adjustments will be updated to the AWS and if the user
-    updates remotely, the local CC3200 board will update the values in the
-    next synchronization.
+    Both boards send their own IP address to the IOT shadow, then read the other’s IP address from the shadow, and finally connect to each other over TCP. The controller board then sends its accelerometer data over to the RC board and awaits accelerometer data from the RC board. The RC board is waiting for accelerometer data from the controller board and once it receives it, the RC board sets the motors in the direction the accelerometer data tilted in. Once that is done, the RC board sends its own accelerometer data to the controller board and then awaits for more accelerometer data from the controller board. Once the controller board receives accelerometer data from the RC board, it displays that data on the OLED. Then it sends its own accelerometer data back to the RC board in a never ending loop. If the switch on the controller board is pressed then it gets out of the loop so that the car stops and if it is pressed again then the loop continues.
   </div>
   <div style="display:inline-block;vertical-align:top;flex:0 0 400px;">
     <div class="fig">
-      <img src="./media/Image_005.jpg" style="width:90%;height:auto;" />
+      <img src="./media/block.png" style="width:90%;height:auto;" />
       <span class="caption">System Flowchart</span>
     </div>
   </div>
 </div>
 
-## Functional Specification
+## System Architecture
 
 <div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;">
   <div style="display:inline-block;vertical-align:top;flex:1 0 300px;">
-    Our system works based on the following state diagram. The device will
-    periodically monitor the temperature and the electrical conductivity
-    (EC) of the solution and convert the values into a TDS value using a
-    calibration curve. At the same time, the device will check for threshold
-    inputs, both over the AWS shadow and via manual input on the IR
-    receiver. It will compare the TDS with the lower and upper thresholds
-    set by the user. If the value is within the thresholds, it will stay in
-    the rest state. If the TDS is higher than the upper thresholds, it will
-    go to the water state and activate the water pump until the PPM is lower
-    than the upper thresholds and go back to the rest state. If the PPM is
-    lower than the lower thresholds, it will go to the nutrient state and
-    activate the nutrient pump until the PPM is higher than the lower
-    thresholds and go back to the rest state. In each state, the device will
-    periodically post the TDS.
+    There are 3 main components to the project, the network, controller, and RC car component. The controller component is in charge of sending its own accelerometer data to the RC car component and displaying the accelerometer data of the RC car component. The RC car component is in charge of setting the motors in the direction according to the accelerometer data of the controller component and sending its own accelerometer data to the controller component. The networking component has two main parts. The first part is the IOT shadow which stores the IP addresses of the controller component and RC car component so they can each read each other’s IP addresses. While both the controller and RC car components incorporate the networking component, they each are more focused with the physical aspects of each component. 
   </div>
   <div style="display:inline-block;vertical-align:top;flex:0 0 500px">
     <div class="fig">
-      <img src="./media/Image_006.jpg" style="width:90%;height:auto;" />
+      <img src="./media/state.png" style="width:90%;height:auto;" />
       <span class="caption">State Diagram</span>
     </div>
   </div>
@@ -153,221 +85,35 @@ individual hobbyists to explore hydroponics.
 
 # Implementation
 
-### CC3200-LAUNCHXL Evaluation Board
+### Building
 
-All control and logic was handled by two CC3200 microcontroller units,
-one each for the Master and Slave device. On the master device, it was
-responsible for decoding IR inputs from the remote to allow the user to
-input thresholds to be sent over AWS. The board’s SPI functionality,
-using the TI SPI library, was used to interface with the OLED display.
-The MCU is WiFi enabled, allowing a remote connection between the two
-boards.
+The car first has to be put together, according to the kit provided. Each motor needs to be connected to the L298N driver module in the output pins. The battery pack requires 4 AA batteries and needs to be connected to the L298N driver module in the power pins. Four GPIO pins on the CC3200 board will need to be connected to the direction control pins of the L298N driver module. Once the software is flashed onto the RC car board, the board power input pins will need to be connected to the L298N driver module in order to power the CC3200 board. Both boards need the I2C jumpers set so they can receive accelerometer readings. SPI also needs to be set up to communicate with the Adafruit OLED display.
 
-On the slave device, the microcontroller was responsible for the same
-functionalities as above, in addition to the TDS reading and control.
-This includes interfacing with the ADC over the I2C bus, reading 
-thresholds over HTTP from the AWS device shadow, writing the reported 
-TDS to the device shadow, and activating the two pumps using the 
-BJT control circuit.
+### Networking
 
-## Functional Blocks: Master
+This component first requires setting up an Amazon IOT shadow that both boards will connect to. Almost as if the shadow represents two real world objects. After connecting to a WiFi hotspot named “rccontrol”, the board controlling the car needs to post its IP address on the shadow so that the controller knows the car’s IP address. After the car board posts its IP address, it simply listens for a TCP socket connection. Meanwhile, the controller retrieves the IP address of the car and then 
 
-### AWS IoT Core
+### Controller
 
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 200px'>
-    The AWS IoT core allows our devices to communicate with each other
-    asynchronously. The master device can update the desired thresholds, and
-    the slave device will read them and synchronize them to the reported
-    state. The slave device will also post the TDS and temperature readings
-    periodically.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:0 0 400px'>
-    <div class="fig">
-      <img src="./media/Image_007.jpg" style="width:auto;height:2.5in" />
-      <span class="caption">Device Shadow JSON</span>
-    </div>
-  </div>
-</div>
+Once the controller has the connection to the RC car, it sends its own accelerometer data to the RC car and then awaits the RC car to send the RC car accelerometer data. Once it receives the RC car accelerometer data, it should then be displayed on the OLED. The data can be displayed on the OLED however one wants. This can be by just displaying the data raw as a string or can be more creative such as drawing a car on the OLED in the direction the car is moving. Once the data is displayed, the controller can do two things. One option is to repeat the previous parts in a loop, starting when it sends its own accelerometer data to the car. The option is when switch 3 is pressed down the controller should loop forever doing nothing so that it acts as if the car is “off” until the switch is pressed again which restarts the main loop.
 
-### OLED Display
+### RC Car
 
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 400px'>
-    On both Master and Slave devices, the user can view the current TDS and
-    temperature of the plant solution on an OLED display. The user can also
-    use the display to view and edit the TDS thresholds. The CC3200 uses the
-    SPI bus to communicate with the display module.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:0 0 400px'>
-    <div class="fig">
-      <img src="./media/Image_008.jpg" style="width:auto;height:2in" />
-      <span class="caption">OLED Wiring Diagram</span>
-    </div>
-  </div>
-</div>
-
-### IR Receiver
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 400px'>
-    On both the Master and Slave devices, a user can input the TDS
-    thresholds using a TV remote. These TV remotes use the NEC code format
-    with a carrier frequency of 38KHz. The Vishay IR receiver is connected
-    to Pin 62 of the CC3200, which is configured as a GPIO input pin. Each
-    positive edge of the signal triggers an interrupt in the main program,
-    storing the pulse distances into a buffer, and allowing us to decode the
-    inputs (1-9, delete and enter). The IR receiver is connected to VCC
-    through a resistor and a capacitor to filter any ripples.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:0 0 400px'>
-    <div class="fig">
-      <img src="./media/Image_009.jpg" style="width:auto;height:2in" />
-      <span class="caption">IR Receiver Wiring Diagram</span>
-    </div>
-  </div>
-</div>
-
-## Functional Blocks: Slave
-
-The slave device contains all the functional blocks from the master
-device, plus the following:
-
-### Analog-To-Digital Converter (ADC) Board
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 400px'>
-    The outputs from the thermistor and TDS sensor board are
-    in the form of analog voltages, which need to be converted to digital
-    values to be usable in our program. We chose the AD1015 breakout board
-    from Adafruit, which sports 4-channels and 12 bits of precision. We
-    ended up using only 2 channels, so there is a potential for even more
-    cost savings. The ADC board supports I2C communication, which we can use
-    to request and read the two channel voltages. 
-    The <a href="https://cdn-shop.adafruit.com/datasheets/ads1015.pdf">
-    product datasheet</a> contains the necessary configuration values
-    and register addresses for operation.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:1 0 400px'>
-    <div class="fig">
-      <img src="./media/Image_010.jpg" style="width:auto;height:2in" />
-      <span class="caption">ADC Wiring Diagram</span>
-    </div>
-  </div>
-</div>
-
-### Thermistor
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 300px;'>
-    Conductivity-based TDS measurements are sensitive to temperature. To
-    allow accurate TDS measurements in a variety of climates and seasons,
-    temperature compensation calculations must be performed. To measure the
-    temperature, we use an NTC thermistor connected in a voltage divider
-    with a 10k resistor. The voltage across the resistor is read by the ADC
-    and converted to temperature using the equation provided by the
-    thermistor datasheet.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:1 0 400px'>
-    <div class="fig">
-      <img src="./media/Image_011.jpg" style="width:auto;height:2in" />
-      <span class="caption">Thermistor Circuit Diagram</span>
-    </div>
-  </div>
-</div>
-
-### TDS Sensor Board
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 500px'>
-    In our first attempt to measure TDS, we used a simple two-probe analog
-    setup with a voltage divider. We soon found out that this was a naïve
-    approach (see Challenges). Consequently, we acquired a specialty TDS
-    sensing board from CQRobot, which generates a sinusoidal pulse and
-    measures the voltage drop to give a highly precise voltage to the ADC.
-    The MCU can then convert this voltage to a TDS value using the equation
-    provided by the device datasheet. We calibrated the TDS readings using a
-    standalone TDS sensor pen. After calibration and setting up the curves
-    for temperature compensation, we were able to achieve TDS readings
-    accurate to within 5% of the TDS sensor pen.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:1 0 600px'>
-    <div class="fig">
-      <img src="./media/Image_012.jpg" style="width:auto;height:2in;padding-top:30px" />
-      <span class="caption">TDS Sensor Wiring Diagram</span>
-    </div>
-  </div>
-</div>
-
-### Pumps and Control Circuit
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;">
-  <div style='display: inline-block; vertical-align: top;flex:1 0 500px'>
-    The CC3200 is unable to provide sufficient power to drive the pumps,
-    which need 100mA of current each. Therefore, we used an external power
-    source in the form of 2 AA batteries for each pump motor. To allow the
-    CC3200 to turn on/off the motors, we designed a simple amplifier using a
-    Common Emitter topology. When the control pin is asserted HIGH, the BJT
-    will allow current to flow from 3V to ground through the pump motor.
-    Conversely, if the control signal is LOW, the BJT will not allow current
-    to flow in the motor. For each motor, there is a reverse-biased diode
-    connected across it. This protects our circuit from current generated by
-    the motor if it is spun from external force or inertia.
-  </div>
-  <div style='display: inline-block; vertical-align: top;flex:1 0 600px'>
-    <div class="fig">
-      <img src="./media/Image_013.jpg" style="width:auto;height:2in;padding-top:30px" />
-      <span class="caption">Pump Circuit Diagrams</span>
-    </div>
-  </div>
-</div>
+Once the RC car has the connection to the Controller, it awaits accelerometer data from the controller. Once it has received it, it needs to set the GPIO pins to the necessary settings in order to move the motors in the direction the controller wants to. The direction can be decided however one wants forward to be. There are 4 control pins on the L298N driver module. Two pins control one motor and the other two pins control the other motor. In order to move them, one of the pins needs to be set to high and the other needs to be set to low, changing direction depending on which one is high. To stop the motors, both pins need to be high or both need to be low. Once the motors are set to the desired setting, the RC car board then sends its own accelerometer data to the controller board and restarts the loop by awaiting for new accelerometer data from the controller board. The intensity of voltages supplied to each motor can also be optionally modulated by setting the GPIO pins to high for a portion of a small duty cycle, where the larger the portion the greater the average power supplied to the motor will be. We opted for a 1ms duty cycle where after every 10 ns, a systick handler sets the GPIO pins to high or low depending on the X and Y inputs from the controller such that the car can be controlled arbitrarily.
 
 # Challenges
 
-The most significant challenge we faced while developing this prototype
-was of inaccurate and inconsistent Electrical Conductivity (EC)
-measurements. This occurred due to two reasons: probe channel
-polarization and current limitations of GPIO pins.
+## Car Construction
 
-## Probe Channel Polarization
+One of the first challenges we encountered was difficulties with building our car. We encountered problems using the battery pack that came with the kit, which seemed to be mysteriously broken the first time we used it and then seemed to somehow work after testing it thoroughly. We also broke the wiring on one of the motors which required us to borrow a motor from the lab room, which fortunately had the exact same models available.
 
-Our first design for the probe was simply two copper rods, which would
-add as electrodes. This probe would be connected in series with a
-1000-ohm resistor to act as a voltage divider. We would simply connect
-the probe to VCC and measure the voltage divider through the ADC,
-allowing us to calculate the EC. However, when we used the probe for a
-few minutes, we realized that the EC value would continue to rise. This
-is because the DC current causes an ionized channel to build up between
-the two electrodes in the water. This cause inconsistent EC readings as
-time goes on.
+## TCP Networking/Establishing Connections
 
-## Current Limitation of GPIO Pins
-
-Our next idea was to try using the GPIO pins to power the probe, since
-we can turn it off when not needed, preventing excessive polarization.
-However, the GPIO pins are current limited, and any control circuit with
-a transistor would introduce extra voltage drops. Therefore, the simple
-two-probe implementation was not feasible.
-
-## Solution to Challenges
-
-We realized that using DC current to measure EC was not feasible.
-Therefore, we purchased a standalone EC measurement board from CQRobot.
-This inexpensive solution (\$8) used a low-voltage, low-current AC
-signal to prevent polarization. The board would convert the AC voltage
-drop across the solution to a DC analog voltage, which would then be
-read by our ADC. After calibrating the setup using a commercial TDS pen,
-the results were accurate within 3%, and would not drift by more than
-0.5% over time.
+Another difficulty was in configuring the TCP connection process. Even though an example project exists already in the CC3200 SDK, it still required some careful thought and workarounds for ensuring that connections are eventually established, including mechanisms for waiting for the other board to connect and gracefully handling bad initial connections. In fact, we went through several different implementations for the actual synchronization process, but eventually settled on the one we use with AWS IoT and the car as the TCP host so to speak.
 
 # Future Work
 
-Given more time, we had the idea of developing a web app to allow users
-to control the device from their cell phone. Another idea we wanted to
-implement in the future is adding a grow light and pH controller to
-maintain a more suitable and stable environment for different plants to
-grow.
-
+The main future component that needs to be implemented is a way to have the two boards reconnect if they ever lose connection. Right now, if either board loses connection completely then the entire system just stops working. Some more fine tuning of the voltage management would also be nice, as the car feels a bit too sensitive to certain motions of the controller. Finally, a mechanism that uses the IR remote and receiver provided in class would provide an interesting means for connecting to any WiFi that’s available, instead of hardcoding the AP name into the networking code.
 
 # Finalized BOM
 

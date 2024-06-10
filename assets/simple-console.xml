@@ -1,26 +1,3 @@
-<!--
-Adapted from:
-  https://stackoverflow.com/questions/55172153/it-is-possible-to-generate-console-highlighting-for-markdown-with-pandoc
-
-Adapted by D. Deatrich to fit the context for console input/output:
-1. prompt for regular user starts in the 1st column with '$' followed by a space
-2. prompt for the root user starts in the 1st column with '#' followed by a space
-3. Both prompt styles work if a end-of-line continuation char '\' is found
-4. Comments start with '//' in the first column
-5. Other console-oriented shell commands implemented so far:
-     - mysql/mariadb:  mysql>
-     - virsh:          virsh # 
-
-Colours and styles for the above elements depend on the editor or tool
-environment.  For the pandoc markdown environment the colours come from
-the highlight theme - the associated pandoc project uses a custom theme
-named 'custom-highlight.theme'; see the associated Makefile.
-
-This file can also be used by the 'kate' editor; place this file in
-  ~/.local/share/katepart5/syntax/
-and create any file named 'some-file-name.console'
-
--->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 <language name="Console" version="5" kateversion="5.0" section="Other" extensions="*.console" mimetype="" author="Denice Deatrich (denice.deatrich@gmail.com)" license="MIT">
