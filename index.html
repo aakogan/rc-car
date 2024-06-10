@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>index</title>
+  <meta name="author" content="Kushagra Tiwari and Shengmin Liu (website template by Ryan Tsang)" />
+  <title>NutriSense: Automated Hydroponics Dosing System</title>
   <!-- <link rel="stylesheet" type="text/css" href="assets/github-markdown-light.css" /> -->
   <link rel="stylesheet" href="assets/github-markdown-light.css" />
   <link rel="stylesheet" href="assets/style-customization.css" />
@@ -13,60 +14,96 @@
   <![endif]-->
 </head>
 <article class="markdown-body">
+<header id="title-block-header">
+<h1 class="title">NutriSense: Automated Hydroponics Dosing System</h1>
+<p class="subtitle"><blockquote><b>EEC172 Final Project Webpage Example</b><br/> Note to current students: this is an <i>example</i> webpage and may not fulfill all stated requirements of the current quarter's assignment.<br/>The website source is hosted <a href="https://github.com/ucd-eec172/project-website-example">on github</a>. </blockquote></p>
+<p class="author"><strong>Kushagra Tiwari and Shengmin Liu</strong>
+(website template by Ryan Tsang)</p>
+<p class="date"><em>EEC172 WQ24</em></p>
+<div class="abstract">
+<div class="abstract-title"><h2>Description</h2></div>
+Hydroponics is a technique where plants are grown in a nutrient-rich
+solution. This soil- free technique has been gaining traction recently
+due to its ability to optimize resource utilization. However, since
+plants are highly sensitive to changes in TDS, hydroponic setups require
+continuous TDS monitoring and adjustment. NutriSense, our device, allows
+hobbyists to achieve ideal hydroponics results on a small scale. It
+continuously monitors TDS and temperature, allowing the user to remotely
+read the status over AWS IoT cloud. The user can remotely enter upper
+and lower thresholds for TDS, and the device will automatically add
+nutrient solution or water to keep the TDS bounded by the thresholds.
+The device can also be configured to send notifications over SNS when
+the TDS value goes outside thresholds. <br/><br/> Our source code can be
+found <!-- replace this link -->
+<a href="https://github.com/ucd-eec172/project-website-example"> here
+(placeholder)</a>.<br />
+<div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;padding-top:20px"> <div style="display: inline-block; vertical-align: bottom;"> <img src="./media/image.jpg" style="width:auto;height:2in"/> <!-- <span class="caption"> </span> --> </div> </div>
+<h2>Video Demo</h2> <div style="text-align:center;margin:auto;max-width:560px"> <div style="padding-bottom:56.25%;position:relative;height:0;"> <iframe style="left:0;top:0;width:100%;height:100%;position:absolute;" width="560" height="315" src="https://www.youtube.com/embed/wSRtnAEZhmc?si=3vQXNj4h0WkW-F-q" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> </div> </div> 
+</div>
+</header>
 <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Table of Contents</h2>
 <ul>
-<li><a href="#description">Description</a></li>
-<li><a href="#design">Design</a><ul>
-<li><a href="#functional-specification">Functional Specification</a></li>
-<li><a href="#system-architecture">System Architecture</a></li>
+<li><a href="#description" id="toc-description">Description</a></li>
+<li><a href="#design" id="toc-design">Design</a>
+<ul>
+<li><a href="#functional-specification"
+id="toc-functional-specification">Functional Specification</a></li>
+<li><a href="#system-architecture" id="toc-system-architecture">System
+Architecture</a></li>
 </ul></li>
-<li><a href="#implementation">Implementation</a><ul>
-<li><a href="#building">Building</a></li>
-<li><a href="#networking">Networking</a></li>
-<li><a href="#controller">Controller</a></li>
-<li><a href="#rc-car">RC Car</a></li>
+<li><a href="#implementation" id="toc-implementation">Implementation</a>
+<ul>
+<li><a href="#building" id="toc-building">Building</a></li>
+<li><a href="#networking" id="toc-networking">Networking</a></li>
+<li><a href="#controller" id="toc-controller">Controller</a></li>
+<li><a href="#rc-car" id="toc-rc-car">RC Car</a></li>
 </ul></li>
-<li><a href="#challenges">Challenges</a><ul>
-<li><a href="#car-construction">Car Construction</a></li>
-<li><a href="#tcp-networkingestablishing-connections">TCP Networking/Establishing Connections</a></li>
+<li><a href="#challenges" id="toc-challenges">Challenges</a>
+<ul>
+<li><a href="#car-construction" id="toc-car-construction">Car
+Construction</a></li>
+<li><a href="#tcp-networkingestablishing-connections"
+id="toc-tcp-networkingestablishing-connections">TCP
+Networking/Establishing Connections</a></li>
 </ul></li>
-<li><a href="#future-work">Future Work</a></li>
-<li><a href="#finalized-bom">Finalized BOM</a></li>
+<li><a href="#future-work" id="toc-future-work">Future Work</a></li>
+<li><a href="#finalized-bom" id="toc-finalized-bom">Finalized
+BOM</a></li>
 </ul>
 </nav>
-<hr />
-<p>title: 'NutriSense: Automated Hydroponics Dosing System' author: '<strong>Kushagra Tiwari and Shengmin Liu</strong> (website template by Ryan Tsang)' date: '<em>EEC172 WQ24</em>'</p>
-<p>subtitle: '<blockquote><b>EEC172 Final Project Webpage Example</b><br/> Note to current students: this is an <i>example</i> webpage and may not fulfill all stated requirements of the current quarter''s assignment.<br/>The website source is hosted <a href="https://github.com/ucd-eec172/project-website-example">on github</a>.</p>
-</blockquote>'
-
-<p>toc-title: 'Table of Contents' abstract-title: '<h2>Description</h2>' abstract: 'Hydroponics is a technique where plants are grown in a nutrient-rich solution. This soil- free technique has been gaining traction recently due to its ability to optimize resource utilization. However, since plants are highly sensitive to changes in TDS, hydroponic setups require continuous TDS monitoring and adjustment. NutriSense, our device, allows hobbyists to achieve ideal hydroponics results on a small scale. It continuously monitors TDS and temperature, allowing the user to remotely read the status over AWS IoT cloud. The user can remotely enter upper and lower thresholds for TDS, and the device will automatically add nutrient solution or water to keep the TDS bounded by the thresholds. The device can also be configured to send notifications over SNS when the TDS value goes outside thresholds. <br/><br/> Our source code can be found</p>
-<!-- replace this link -->
-
-<a href="https://github.com/ucd-eec172/project-website-example">
-  here (placeholder)</a>.
-
-<div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;padding-top:20px">
-  <div style="display: inline-block; vertical-align: bottom;">
-    <img src="./media/image.jpg" style="width:auto;height:2in"/>
-    <!-- <span class="caption"> </span> -->
-  </div>
-</div>
-
-<h2>Video Demo</h2>
-<div style="text-align:center;margin:auto;max-width:560px">
-  <div style="padding-bottom:56.25%;position:relative;height:0;">
-    <iframe style="left:0;top:0;width:100%;height:100%;position:absolute;" width="560" height="315" src="https://www.youtube.com/embed/wSRtnAEZhmc?si=3vQXNj4h0WkW-F-q" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  </div>
-</div>
-'
----
-
 <!-- EDIT METADATA ABOVE FOR CONTENTS TO APPEAR ABOVE THE TABLE OF CONTENTS -->
 
 <!-- ALL CONTENT THAT FOLLWOWS WILL APPEAR IN AND AFTER THE TABLE OF CONTENTS -->
 
 <h1 id="description">Description</h1>
-<p>Our project is a remote controlled RC car that communicates over TCP via a WiFi hotspot. Instead of a typical remote that uses levers or buttons to control the direction of the car, the remote instead is the accelerometer on a Ti CC3200 board. In other words, in order to move the car, you would have to tilt the Ti CC3200 board in the direction you want it to move. The actual car is a kit from DIYables that comes with 2 DC motors, a chassis with wheels, and a battery pack to power the motors. In addition, a L298N driver module needs to be acquired in order to control the motors. Typically the car and the remote would communicate via IR or bluetooth but we have instead opted to communicate over TCP because the CC3200 board does not support bluetooth or IR communication. Because of this, there is one CC3200 board that is physically controlling the car and another CC3200 board that is acting as the controller in order to be able to control the RC car without wires needing to be attached. The L298N driver is also able to power the CC3200 board that it is attached to because the battery pack has a total capacity of 6V. The motors and the CC3200 board that controls them are both being powered by the same source which lowers how many power sources we need on the car chassis. In order for the CC3200 boards to communicate over TCP, they needed to know the IP address of the other. The C3200 that controls the car posts its IP address to AWS IoT so that the controller CC3200 can retrieve it and establish a connection. The controller board also has an OLED screen that displays the accelerometer data of the board on the RC car. Information being displayed means that both boards are successfully sharing information with each other. If switch 3 on the controller board is pressed then it stops sending data to the RC board, acting as if the car has stopped.</p>
+<p>Our project is a remote controlled RC car that communicates over TCP
+via a WiFi hotspot. Instead of a typical remote that uses levers or
+buttons to control the direction of the car, the remote instead is the
+accelerometer on a Ti CC3200 board. In other words, in order to move the
+car, you would have to tilt the Ti CC3200 board in the direction you
+want it to move. The actual car is a kit from DIYables that comes with 2
+DC motors, a chassis with wheels, and a battery pack to power the
+motors. In addition, a L298N driver module needs to be acquired in order
+to control the motors. Typically the car and the remote would
+communicate via IR or bluetooth but we have instead opted to communicate
+over TCP because the CC3200 board does not support bluetooth or IR
+communication. Because of this, there is one CC3200 board that is
+physically controlling the car and another CC3200 board that is acting
+as the controller in order to be able to control the RC car without
+wires needing to be attached. The L298N driver is also able to power the
+CC3200 board that it is attached to because the battery pack has a total
+capacity of 6V. The motors and the CC3200 board that controls them are
+both being powered by the same source which lowers how many power
+sources we need on the car chassis. In order for the CC3200 boards to
+communicate over TCP, they needed to know the IP address of the other.
+The C3200 that controls the car posts its IP address to AWS IoT so that
+the controller CC3200 can retrieve it and establish a connection. The
+controller board also has an OLED screen that displays the accelerometer
+data of the board on the RC car. Information being displayed means that
+both boards are successfully sharing information with each other. If
+switch 3 on the controller board is pressed then it stops sending data
+to the RC board, acting as if the car has stopped.</p>
 <h1 id="design">Design</h1>
 <h2 id="functional-specification">Functional Specification</h2>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-evenly;">
@@ -96,20 +133,88 @@
 
 <h1 id="implementation">Implementation</h1>
 <h3 id="building">Building</h3>
-<p>The car first has to be put together, according to the kit provided. Each motor needs to be connected to the L298N driver module in the output pins. The battery pack requires 4 AA batteries and needs to be connected to the L298N driver module in the power pins. Four GPIO pins on the CC3200 board will need to be connected to the direction control pins of the L298N driver module. Once the software is flashed onto the RC car board, the board power input pins will need to be connected to the L298N driver module in order to power the CC3200 board. Both boards need the I2C jumpers set so they can receive accelerometer readings. SPI also needs to be set up to communicate with the Adafruit OLED display.</p>
+<p>The car first has to be put together, according to the kit provided.
+Each motor needs to be connected to the L298N driver module in the
+output pins. The battery pack requires 4 AA batteries and needs to be
+connected to the L298N driver module in the power pins. Four GPIO pins
+on the CC3200 board will need to be connected to the direction control
+pins of the L298N driver module. Once the software is flashed onto the
+RC car board, the board power input pins will need to be connected to
+the L298N driver module in order to power the CC3200 board. Both boards
+need the I2C jumpers set so they can receive accelerometer readings. SPI
+also needs to be set up to communicate with the Adafruit OLED
+display.</p>
 <h3 id="networking">Networking</h3>
-<p>This component first requires setting up an Amazon IOT shadow that both boards will connect to. Almost as if the shadow represents two real world objects. After connecting to a WiFi hotspot named “rccontrol”, the board controlling the car needs to post its IP address on the shadow so that the controller knows the car’s IP address. After the car board posts its IP address, it simply listens for a TCP socket connection. Meanwhile, the controller retrieves the IP address of the car and then</p>
+<p>This component first requires setting up an Amazon IOT shadow that
+both boards will connect to. Almost as if the shadow represents two real
+world objects. After connecting to a WiFi hotspot named “rccontrol”, the
+board controlling the car needs to post its IP address on the shadow so
+that the controller knows the car’s IP address. After the car board
+posts its IP address, it simply listens for a TCP socket connection.
+Meanwhile, the controller retrieves the IP address of the car and
+then</p>
 <h3 id="controller">Controller</h3>
-<p>Once the controller has the connection to the RC car, it sends its own accelerometer data to the RC car and then awaits the RC car to send the RC car accelerometer data. Once it receives the RC car accelerometer data, it should then be displayed on the OLED. The data can be displayed on the OLED however one wants. This can be by just displaying the data raw as a string or can be more creative such as drawing a car on the OLED in the direction the car is moving. Once the data is displayed, the controller can do two things. One option is to repeat the previous parts in a loop, starting when it sends its own accelerometer data to the car. The option is when switch 3 is pressed down the controller should loop forever doing nothing so that it acts as if the car is “off” until the switch is pressed again which restarts the main loop.</p>
+<p>Once the controller has the connection to the RC car, it sends its
+own accelerometer data to the RC car and then awaits the RC car to send
+the RC car accelerometer data. Once it receives the RC car accelerometer
+data, it should then be displayed on the OLED. The data can be displayed
+on the OLED however one wants. This can be by just displaying the data
+raw as a string or can be more creative such as drawing a car on the
+OLED in the direction the car is moving. Once the data is displayed, the
+controller can do two things. One option is to repeat the previous parts
+in a loop, starting when it sends its own accelerometer data to the car.
+The option is when switch 3 is pressed down the controller should loop
+forever doing nothing so that it acts as if the car is “off” until the
+switch is pressed again which restarts the main loop.</p>
 <h3 id="rc-car">RC Car</h3>
-<p>Once the RC car has the connection to the Controller, it awaits accelerometer data from the controller. Once it has received it, it needs to set the GPIO pins to the necessary settings in order to move the motors in the direction the controller wants to. The direction can be decided however one wants forward to be. There are 4 control pins on the L298N driver module. Two pins control one motor and the other two pins control the other motor. In order to move them, one of the pins needs to be set to high and the other needs to be set to low, changing direction depending on which one is high. To stop the motors, both pins need to be high or both need to be low. Once the motors are set to the desired setting, the RC car board then sends its own accelerometer data to the controller board and restarts the loop by awaiting for new accelerometer data from the controller board. The intensity of voltages supplied to each motor can also be optionally modulated by setting the GPIO pins to high for a portion of a small duty cycle, where the larger the portion the greater the average power supplied to the motor will be. We opted for a 1ms duty cycle where after every 10 ns, a systick handler sets the GPIO pins to high or low depending on the X and Y inputs from the controller such that the car can be controlled arbitrarily.</p>
+<p>Once the RC car has the connection to the Controller, it awaits
+accelerometer data from the controller. Once it has received it, it
+needs to set the GPIO pins to the necessary settings in order to move
+the motors in the direction the controller wants to. The direction can
+be decided however one wants forward to be. There are 4 control pins on
+the L298N driver module. Two pins control one motor and the other two
+pins control the other motor. In order to move them, one of the pins
+needs to be set to high and the other needs to be set to low, changing
+direction depending on which one is high. To stop the motors, both pins
+need to be high or both need to be low. Once the motors are set to the
+desired setting, the RC car board then sends its own accelerometer data
+to the controller board and restarts the loop by awaiting for new
+accelerometer data from the controller board. The intensity of voltages
+supplied to each motor can also be optionally modulated by setting the
+GPIO pins to high for a portion of a small duty cycle, where the larger
+the portion the greater the average power supplied to the motor will be.
+We opted for a 1ms duty cycle where after every 10 ns, a systick handler
+sets the GPIO pins to high or low depending on the X and Y inputs from
+the controller such that the car can be controlled arbitrarily.</p>
 <h1 id="challenges">Challenges</h1>
 <h2 id="car-construction">Car Construction</h2>
-<p>One of the first challenges we encountered was difficulties with building our car. We encountered problems using the battery pack that came with the kit, which seemed to be mysteriously broken the first time we used it and then seemed to somehow work after testing it thoroughly. We also broke the wiring on one of the motors which required us to borrow a motor from the lab room, which fortunately had the exact same models available.</p>
-<h2 id="tcp-networkingestablishing-connections">TCP Networking/Establishing Connections</h2>
-<p>Another difficulty was in configuring the TCP connection process. Even though an example project exists already in the CC3200 SDK, it still required some careful thought and workarounds for ensuring that connections are eventually established, including mechanisms for waiting for the other board to connect and gracefully handling bad initial connections. In fact, we went through several different implementations for the actual synchronization process, but eventually settled on the one we use with AWS IoT and the car as the TCP host so to speak.</p>
+<p>One of the first challenges we encountered was difficulties with
+building our car. We encountered problems using the battery pack that
+came with the kit, which seemed to be mysteriously broken the first time
+we used it and then seemed to somehow work after testing it thoroughly.
+We also broke the wiring on one of the motors which required us to
+borrow a motor from the lab room, which fortunately had the exact same
+models available.</p>
+<h2 id="tcp-networkingestablishing-connections">TCP
+Networking/Establishing Connections</h2>
+<p>Another difficulty was in configuring the TCP connection process.
+Even though an example project exists already in the CC3200 SDK, it
+still required some careful thought and workarounds for ensuring that
+connections are eventually established, including mechanisms for waiting
+for the other board to connect and gracefully handling bad initial
+connections. In fact, we went through several different implementations
+for the actual synchronization process, but eventually settled on the
+one we use with AWS IoT and the car as the TCP host so to speak.</p>
 <h1 id="future-work">Future Work</h1>
-<p>The main future component that needs to be implemented is a way to have the two boards reconnect if they ever lose connection. Right now, if either board loses connection completely then the entire system just stops working. Some more fine tuning of the voltage management would also be nice, as the car feels a bit too sensitive to certain motions of the controller. Finally, a mechanism that uses the IR remote and receiver provided in class would provide an interesting means for connecting to any WiFi that’s available, instead of hardcoding the AP name into the networking code.</p>
+<p>The main future component that needs to be implemented is a way to
+have the two boards reconnect if they ever lose connection. Right now,
+if either board loses connection completely then the entire system just
+stops working. Some more fine tuning of the voltage management would
+also be nice, as the car feels a bit too sensitive to certain motions of
+the controller. Finally, a mechanism that uses the IR remote and
+receiver provided in class would provide an interesting means for
+connecting to any WiFi that’s available, instead of hardcoding the AP
+name into the networking code.</p>
 <h1 id="finalized-bom">Finalized BOM</h1>
 <!-- you can convert google sheet cells to html for free using a converter
   like https://tabletomarkdown.com/convert-spreadsheet-to-html/ -->
